@@ -1,17 +1,11 @@
 console.log("BMI Calculator");
 
-interface BMIValues {
+export interface BMIValues {
 	height: number;
 	weight: number;
 }
 
-const parseArguments = (args: Array<string>): BMIValues => {
-	// Check if there are fewer than 4 arguments
-	// process.argv includes:
-	// 0: path to the node executable
-	// 1: path to the script file
-	// 2: height argument
-	// 3: weight argument
+export const parseArguments = (args: Array<string>): BMIValues => {
 	if (args.length < 4) throw new Error("Not enough arguments");
 	if (args.length > 4) throw new Error("Too many arguments");
 
@@ -25,36 +19,40 @@ const parseArguments = (args: Array<string>): BMIValues => {
 	}
 };
 
-const calculateBMI = (height: number, weight: number) => {
+export const calculateBMI = (height: number, weight: number): string => {
 	height = height / 100;
-	return weight / (height * height);
-};
-
-try {
-	const { height, weight } = parseArguments(process.argv);
-	const bmi = calculateBMI(height, weight);
+	const bmi = weight / (height * height);
 
 	switch (true) {
 		case bmi < 18.5:
 			console.log("Underweight");
-			break;
+			return "Underweight";
 		case bmi >= 18.5 && bmi < 24.9:
 			console.log("Normal weight");
-			break;
+			return "Normal weight";
 		case bmi >= 25 && bmi < 29.9:
 			console.log("Overweight");
-			break;
+			return "Overweight";
 		case bmi >= 30:
 			console.log("Obese");
-			break;
+			return "Obese";
 		default:
 			console.log("Invalid BMI");
+			return "Invalid BMI";
 	}
-} catch (error: unknown) {
-	let errorMessage = "Something went wrong: ";
-	if (error instanceof Error) {
-		errorMessage += error.message;
-	}
+};
 
-	console.log(errorMessage);
+// Only run the following code if this module is executed directly
+if (require.main === module) {
+	try {
+		const { height, weight } = parseArguments(process.argv);
+		calculateBMI(height, weight);
+	} catch (error: unknown) {
+		let errorMessage = "Something went wrong: ";
+		if (error instanceof Error) {
+			errorMessage += error.message;
+		}
+
+		console.log(errorMessage);
+	}
 }
