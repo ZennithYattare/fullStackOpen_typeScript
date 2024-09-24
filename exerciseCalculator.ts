@@ -1,4 +1,4 @@
-interface Result {
+export interface Result {
 	periodLength: number;
 	trainingDays: number;
 	success: boolean;
@@ -8,7 +8,12 @@ interface Result {
 	average: number;
 }
 
-const parseExerciseArguments = (args: Array<string>): number[] => {
+export interface ExerciseRequestBody {
+	daily_exercises: number[];
+	target: number;
+}
+
+export const parseExerciseArguments = (args: Array<string>): number[] => {
 	// Ensure there are at least 4 arguments: node path, script path, target, and at least one daily exercise hourS
 	if (args.length < 4) throw new Error("Not enough arguments");
 
@@ -22,7 +27,7 @@ const parseExerciseArguments = (args: Array<string>): number[] => {
 	return [target, ...dailyExerciseHours];
 };
 
-const calculateExercise = (
+export const calculateExercise = (
 	dailyExerciseHours: number[],
 	target: number
 ): Result => {
@@ -66,17 +71,21 @@ const calculateExercise = (
 	};
 };
 
-try {
-	const [target, ...dailyExerciseHours] = parseExerciseArguments(process.argv);
+if (require.main === module) {
+	try {
+		const [target, ...dailyExerciseHours] = parseExerciseArguments(
+			process.argv
+		);
 
-	const result = calculateExercise(dailyExerciseHours, target);
+		const result = calculateExercise(dailyExerciseHours, target);
 
-	console.log(result);
-} catch (error: unknown) {
-	let errorMessage = "Something went wrong: ";
-	if (error instanceof Error) {
-		errorMessage += error.message;
+		console.log(result);
+	} catch (error: unknown) {
+		let errorMessage = "Something went wrong: ";
+		if (error instanceof Error) {
+			errorMessage += error.message;
+		}
+
+		console.log(errorMessage);
 	}
-
-	console.log(errorMessage);
 }
