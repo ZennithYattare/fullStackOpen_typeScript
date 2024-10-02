@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import express, { Response } from "express";
 
 import patientService from "../services/patientService";
@@ -19,7 +20,17 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (_req, res) => {
-	res.send("Saving a patient!");
+	const { name, dateOfBirth, ssn, gender, occupation } = _req.body;
+
+	const newPatient = patientService.addPatient({
+		name,
+		dateOfBirth,
+		ssn,
+		gender,
+		occupation,
+	});
+
+	res.json(newPatient);
 });
 
 export default router;
