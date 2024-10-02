@@ -20,8 +20,14 @@ const addEntry = () => {
 	return null;
 };
 
+const findById = (id: string): PatientEntry | undefined => {
+	const entry = patients.find((p) => p.id === id);
+	return entry;
+};
+
 export default {
 	getEntries,
 	addEntry,
 	getNonSensitiveEntries,
+	findById,
 };
