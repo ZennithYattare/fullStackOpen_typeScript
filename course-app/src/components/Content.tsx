@@ -1,19 +1,18 @@
+import { CoursePart } from "../types";
+import Part from "./Part";
+
+// Define the ContentProps interface
 interface ContentProps {
-	courseParts: {
-		name: string;
-		exerciseCount: number;
-	}[];
+  courseParts: CoursePart[];
 }
 
 const Content = (props: ContentProps) => {
 	return (
-		<>
+		<div>
 			{props.courseParts.map((part, i) => (
-				<p key={i}>
-					{part.name} {part.exerciseCount}
-				</p>
-			))}
-		</>
+        <Part key={i} part={part} />
+      ))}
+		</div>
 	);
 };
 
