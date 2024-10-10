@@ -56,25 +56,105 @@ const Input = (props: InputProps) => {
 			<form onSubmit={diaryCreation}>
 				date
 				<input
-					type="text"
+					type="date"
 					placeholder="YYYY-MM-DD"
 					value={date}
 					onChange={(event) => setDate(event.target.value)}
 				/>
 				<br />
 				visibility
+				<label style={{ marginLeft: "12px" }} htmlFor="great">
+					great
+				</label>
 				<input
-					type="text"
-					placeholder="visibility"
-					value={visibility}
+					defaultChecked
+					id="great"
+					name="visibility"
+					type="radio"
+					value={Visibility.Great}
+					onChange={(event) => setVisibility(event.target.value as Visibility)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="good">
+					good
+				</label>
+				<input
+					id="good"
+					name="visibility"
+					type="radio"
+					value={Visibility.Good}
+					onChange={(event) => setVisibility(event.target.value as Visibility)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="ok">
+					ok
+				</label>
+				<input
+					id="ok"
+					name="visibility"
+					type="radio"
+					value={Visibility.Ok}
+					onChange={(event) => setVisibility(event.target.value as Visibility)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="poor">
+					poor
+				</label>
+				<input
+					id="poor"
+					name="visibility"
+					type="radio"
+					value={Visibility.Poor}
 					onChange={(event) => setVisibility(event.target.value as Visibility)}
 				/>
 				<br />
 				weather
+				<label style={{ marginLeft: "12px" }} htmlFor="sunny">
+					sunny
+				</label>
 				<input
-					type="text"
-					placeholder="weather"
-					value={weather}
+					defaultChecked
+					id="sunny"
+					name="weather"
+					type="radio"
+					value={Weather.Sunny}
+					onChange={(event) => setWeather(event.target.value as Weather)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="rainy">
+					rainy
+				</label>
+				<input
+					id="rainy"
+					name="weather"
+					type="radio"
+					value={Weather.Rainy}
+					onChange={(event) => setWeather(event.target.value as Weather)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="cloudy">
+					cloudy
+				</label>
+				<input
+					id="cloudy"
+					name="weather"
+					type="radio"
+					value={Weather.Cloudy}
+					onChange={(event) => setWeather(event.target.value as Weather)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="stormy">
+					stormy
+				</label>
+				<input
+					id="stormy"
+					name="weather"
+					type="radio"
+					value={Weather.Stormy}
+					onChange={(event) => setWeather(event.target.value as Weather)}
+				/>
+				<label style={{ marginLeft: "12px" }} htmlFor="windy">
+					windy
+				</label>
+				<input
+					id="windy"
+					name="weather"
+					type="radio"
+					value={Weather.Windy}
 					onChange={(event) => setWeather(event.target.value as Weather)}
 				/>
 				<br />
