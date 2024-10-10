@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
+import axios from "axios";
 
 import { Weather, Visibility, DiaryEntry } from "../types";
 import { createDiary } from "../services/diaryService";
@@ -13,16 +14,45 @@ const Input = (props: InputProps) => {
 	const [visibility, setVisibility] = useState(Visibility.Great);
 	const [weather, setWeather] = useState(Weather.Sunny);
 	const [comment, setComment] = useState("");
+	const [error, setError] = useState<string | null>(null);
 
-	const diaryCreation = (event: React.SyntheticEvent) => {
+	const diaryCreation = async (event: React.SyntheticEvent) => {
 		event.preventDefault();
-		createDiary({ date, visibility, weather, comment }).then((diary) => {
-			props.setDiaries(props.diaries.concat(diary as DiaryEntry));
-		});
+		try {
+			const diary = await createDiary({ date, visibility, weather, comment });
+			props.setDiaries((prevDiaries) =>
+				prevDiaries.concat(diary as DiaryEntry)
+			);
+		} catch (error: unknown) {
+			if (axios.isAxiosError(error)) {
+				if (
+					error?.response?.data &&
+					typeof error?.response?.data === "string"
+				) {
+					const message = error.response.data.replace(
+						"Something went wrong. Error: ",
+						""
+					);
+					console.error(message);
+					setError(message);
+				} else {
+					setError("Unrecognized axios error");
+				}
+			} else {
+				console.error("Unknown error", error);
+				setError("Unknown error");
+			}
+
+			// Reset error state to null after 5 seconds
+			setTimeout(() => {
+				setError(null);
+			}, 5000);
+		}
 	};
 
 	return (
 		<>
+			{error && <p style={{ color: "red" }}>{error}</p>}
 			<form onSubmit={diaryCreation}>
 				date
 				<input
@@ -56,9 +86,7 @@ const Input = (props: InputProps) => {
 					onChange={(event) => setComment(event.target.value)}
 				/>
 				<br />
-				<button type="submit">
-					add
-				</button>
+				<button type="submit">add</button>
 			</form>
 		</>
 	);
