@@ -1,21 +1,14 @@
-import { useState, useEffect } from "react";
-
 import { DiaryEntry } from "../types";
-import { getAllDiaries } from "../services/diaryService";
 
-const Content = () => {
-	const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
+interface ContentProps {
+	diaries: DiaryEntry[];
+}
 
-	useEffect(() => {
-		getAllDiaries().then((diaries) => {
-			setDiaries(diaries);
-		});
-	}, []);
-
+const Content = (props: ContentProps) => {
 	return (
 		<div>
 			<ul style={{ listStyleType: "none", paddingLeft: "0px" }}>
-				{diaries.map((diary) => (
+				{props.diaries.map((diary) => (
 					<li key={diary.id}>
 						<p>
 							<strong>{diary.date}</strong>
