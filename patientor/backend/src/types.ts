@@ -9,6 +9,13 @@ export interface DiagnosisEntry {
 	latin?: string;
 }
 
+export enum HealthCheckRating {
+	"Healthy" = 0,
+	"LowRisk" = 1,
+	"HighRisk" = 2,
+	"CriticalRisk" = 3,
+}
+
 // NOTE: Patient
 export enum Gender {
 	Male = "male",
@@ -16,15 +23,10 @@ export enum Gender {
 	Other = "other",
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Entry {
-
-}
-
 export type NewPatientEntry = z.infer<typeof NewPatientEntrySchema>;
 
 export interface PatientEntry extends NewPatientEntry {
 	id: string;
-};
+}
 
 export type NonSensitivePatient = Omit<PatientEntry, "ssn" | "entries">;
