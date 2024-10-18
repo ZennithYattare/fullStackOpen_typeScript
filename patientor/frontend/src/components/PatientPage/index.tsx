@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import patientService from "../../services/patients";
-import { Patient } from "../../types";
+import { PatientEntry } from "../../types";
 import { MaleSharp, FemaleSharp, TransgenderSharp } from "@mui/icons-material";
 
 const PatientPage = () => {
 	const { id } = useParams<{ id: string }>();
 
-	const [patient, setPatient] = useState<Patient>();
+	const [patient, setPatient] = useState<PatientEntry>();
 
 	useEffect(() => {
 		const fetchPatient = async () => {
