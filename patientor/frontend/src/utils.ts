@@ -64,3 +64,12 @@ export const NewPatientEntrySchema = z.object({
 export const toNewPatientEntry = (object: unknown): NewPatientEntry => {
 	return NewPatientEntrySchema.parse(object);
 };
+
+/**
+ * Helper function for exhaustive type checking
+ */
+export const assertNever = (value: never): never => {
+	throw new Error(
+		`Unhandled discriminated union member: ${JSON.stringify(value)}`
+	);
+};
