@@ -8,6 +8,13 @@ interface EntryDetailsProps {
 	diagnosisMap: Record<string, DiagnosisEntry>;
 }
 
+const healthCheckRatingDescriptions = [
+	"Healthy",
+	"Low Risk",
+	"High Risk",
+	"Critical Risk",
+];
+
 const EntryDetails = (props: EntryDetailsProps) => {
 	switch (props.entry.type) {
 		case "HealthCheck":
@@ -16,7 +23,12 @@ const EntryDetails = (props: EntryDetailsProps) => {
 					<u style={{ marginRight: "12px" }}>{props.entry.date}</u>
 					<Chip label="Health Check" color="warning" size="small" />
 					<p>{props.entry.description}</p>
-					<span>Health check rating: {props.entry.healthCheckRating}</span>
+					<span>
+						Health check rating:{" "}
+						<b>
+							{healthCheckRatingDescriptions[props.entry.healthCheckRating]}
+						</b>
+					</span>
 					<p>
 						<i>diagnosed by {props.entry.specialist}</i>
 					</p>
