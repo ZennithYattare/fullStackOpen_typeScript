@@ -1,7 +1,14 @@
 import { z } from "zod";
 
-import { NewPatientEntry, Gender, HealthCheckRating } from "./types";
+import {
+	NewPatientEntry,
+	Gender,
+	HealthCheckRating,
+	EntryWithoutId,
+	DiagnosisEntry,
+} from "./types";
 
+// NOTE: Base entry schema
 const BaseEntrySchema = z.object({
 	id: z.string(),
 	description: z.string(),
@@ -50,6 +57,43 @@ export const EntrySchema = z.union([
 	OccupationalHealthcareEntrySchema,
 ]);
 
+// Create schemas that omit the `id` field
+const HealthCheckEntryWithoutIdSchema = HealthCheckEntrySchema.omit({
+	id: true,
+});
+const HospitalEntryWithoutIdSchema = HospitalEntrySchema.omit({ id: true });
+const OccupationalHealthcareEntryWithoutIdSchema =
+	OccupationalHealthcareEntrySchema.omit({ id: true });
+
+// Create a union of the schemas without `id`
+export const EntryWithoutIdSchema = z.union([
+	HealthCheckEntryWithoutIdSchema,
+	HospitalEntryWithoutIdSchema,
+	OccupationalHealthcareEntryWithoutIdSchema,
+]);
+
+// Function to parse and validate the entry data
+export const toNewEntry = (object: unknown): EntryWithoutId => {
+	const parsedEntry = EntryWithoutIdSchema.parse(object);
+	return {
+		...parsedEntry,
+		diagnosisCodes: parseDiagnosisCodes(object),
+	};
+};
+
+// Function to parse diagnosis codes
+const parseDiagnosisCodes = (
+	object: unknown
+): Array<DiagnosisEntry["code"]> => {
+	if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
+		// we will just trust the data to be in correct form
+		return [] as Array<DiagnosisEntry["code"]>;
+	}
+
+	return object.diagnosisCodes as Array<DiagnosisEntry["code"]>;
+};
+
+// NOTE: Patient
 export const NewPatientEntrySchema = z.object({
 	name: z.string(),
 	ssn: z.string(),

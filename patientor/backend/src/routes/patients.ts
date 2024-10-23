@@ -2,8 +2,13 @@ import express, { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
 import patientService from "../services/patientService";
-import { NonSensitivePatient, NewPatientEntry, PatientEntry } from "../types";
-import { NewPatientEntrySchema } from "../utils";
+import {
+	NonSensitivePatient,
+	NewPatientEntry,
+	PatientEntry,
+	EntryWithoutId,
+} from "../types";
+import { NewPatientEntrySchema, toNewEntry } from "../utils";
 
 const router = express.Router();
 
@@ -19,6 +24,20 @@ router.get("/:id", (req, res) => {
 		res.sendStatus(404);
 	}
 });
+
+router.post(
+	"/:id/entries",
+	(req: Request<{ id: string }, unknown, EntryWithoutId>, res) => {
+		const patient = patientService.findById(req.params.id);
+		if (patient) {
+			const newEntry = toNewEntry(req.body); // Validate the entry data
+			const addedEntry = patientService.addEntry(newEntry, patient);
+			res.json(addedEntry);
+		} else {
+			res.status(404).send({ error: "Patient not found" });
+		}
+	}
+);
 
 const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
 	try {
