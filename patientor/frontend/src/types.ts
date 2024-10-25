@@ -34,3 +34,10 @@ export type NonSensitivePatient = Omit<PatientEntry, "ssn" | "entries">;
 export type PatientFormValues = Omit<PatientEntry, "id" | "entries">;
 
 export type Entry = z.infer<typeof EntrySchema>;
+
+// Define special omit for unions
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+	? Omit<T, K>
+	: never;
+// Define Entry without the 'id' property
+export type EntryWithoutId = UnionOmit<Entry, "id">;

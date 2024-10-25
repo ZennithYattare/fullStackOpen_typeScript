@@ -2,16 +2,20 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import EntryDetails from "./EntryDetails";
+import AddEntry from "./AddEntry";
 import patientService from "../../services/patients";
 import diagnosisService from "../../services/diagnoses";
 import { PatientEntry, DiagnosisEntry } from "../../types";
 import { MaleSharp, FemaleSharp, TransgenderSharp } from "@mui/icons-material";
+import { Button } from "@mui/material";
 
 const PatientPage = () => {
 	const { id } = useParams<{ id: string }>();
 
 	const [patient, setPatient] = useState<PatientEntry>();
 	const [diagnoses, setDiagnoses] = useState<DiagnosisEntry[]>([]);
+	const [entries, setEntries] = useState<PatientEntry["entries"]>([]);
+	const [addEntryModal, setAddEntryModal] = useState(false);
 
 	useEffect(() => {
 		const fetchPatient = async () => {
@@ -19,6 +23,10 @@ const PatientPage = () => {
 				const patient = await patientService.getOne(id);
 				console.log(patient);
 				setPatient(patient);
+
+				if (patient.entries) {
+					setEntries(patient.entries);
+				}
 			}
 		};
 		void fetchPatient();
@@ -61,19 +69,30 @@ const PatientPage = () => {
 			<span>ssn: {patient.ssn}</span>
 			<br />
 			<span>occupation: {patient.occupation}</span>
-
+			<br />
+			{!addEntryModal && (
+				<Button
+					style={{ marginTop: "12px" }}
+					variant="contained"
+					color="success"
+					onClick={() => setAddEntryModal(!addEntryModal)}
+				>
+					Add New Entry
+				</Button>
+			)}
+			{addEntryModal && (
+				<AddEntry setEntries={setEntries} setAddEntryModal={setAddEntryModal} />
+			)}
 			<h3>entries</h3>
-			<p>
-				<ul>
-					{patient.entries.map((entry) => (
-						<EntryDetails
-							key={entry.id}
-							entry={entry}
-							diagnosisMap={diagnosisMap}
-						/>
-					))}
-				</ul>
-			</p>
+			<ul>
+				{entries.map((entry) => (
+					<EntryDetails
+						key={entry.id}
+						entry={entry}
+						diagnosisMap={diagnosisMap}
+					/>
+				))}
+			</ul>
 		</>
 	);
 };
