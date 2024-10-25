@@ -45,7 +45,6 @@ const EntryDetails = (props: EntryDetailsProps) => {
 						color="primary"
 						size="small"
 					/>
-					<span>[Employer name: FBI]</span>
 					<p>{props.entry.description}</p>
 					<ul>
 						{props.entry.diagnosisCodes?.map((code) => (
@@ -74,7 +73,7 @@ const EntryDetails = (props: EntryDetailsProps) => {
 						color="secondary"
 						size="small"
 					/>
-					<span>[Employer name: FBI]</span>
+					<span>[Employer name: {props.entry.employerName}]</span>
 					<p>{props.entry.description}</p>
 					{props.entry.sickLeave && (
 						<p>
