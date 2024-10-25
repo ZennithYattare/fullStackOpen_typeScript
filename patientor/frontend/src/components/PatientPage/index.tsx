@@ -85,13 +85,18 @@ const PatientPage = () => {
 			)}
 			<h3>entries</h3>
 			<ul>
-				{entries.map((entry) => (
-					<EntryDetails
-						key={entry.id}
-						entry={entry}
-						diagnosisMap={diagnosisMap}
-					/>
-				))}
+				{entries
+					.slice() // Create a shallow copy of the entries array to avoid mutating the original array
+					.sort(
+						(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+					) // Sort by date in descending order
+					.map((entry) => (
+						<EntryDetails
+							key={entry.id}
+							entry={entry}
+							diagnosisMap={diagnosisMap}
+						/>
+					))}
 			</ul>
 		</>
 	);
