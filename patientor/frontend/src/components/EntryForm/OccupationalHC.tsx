@@ -80,7 +80,7 @@ const OccupationalHC = (props: AddEntryProps) => {
 	return (
 		<div>
 			<form onSubmit={(e) => handleSubmit(e)}>
-				<h2>New Hospital Entry</h2>
+				<h2>New Occupational Healthcare Entry</h2>
 				<div style={{ marginBottom: "1rem" }}>
 					<TextField
 						label="Description"
