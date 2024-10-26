@@ -134,7 +134,7 @@ const OccupationalHC = (props: AddEntryProps) => {
 				<div style={{ marginBottom: "1rem" }}>
 					<TextField
 						type="date"
-						label="Start Date"
+						label="Sick Leave Start Date"
 						variant="filled"
 						fullWidth
 						required
@@ -147,7 +147,7 @@ const OccupationalHC = (props: AddEntryProps) => {
 				<div style={{ marginBottom: "1rem" }}>
 					<TextField
 						type="date"
-						label="End Date"
+						label="Sick Leave End Date"
 						variant="filled"
 						fullWidth
 						required
