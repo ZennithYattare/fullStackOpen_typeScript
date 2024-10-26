@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 
-import { PatientEntry } from "../../types";
+import { DiagnosisEntry, PatientEntry } from "../../types";
 import HealthCheck from "../EntryForm/HealthCheck";
 import Hospital from "../EntryForm/Hospital";
 import OccupationalHC from "../EntryForm/OccupationalHC";
-import React from "react";
 
 interface AddEntryProps {
 	setEntries: React.Dispatch<React.SetStateAction<PatientEntry["entries"]>>;
 	setAddEntryModal: React.Dispatch<React.SetStateAction<boolean>>;
+	diagnoses: DiagnosisEntry[];
 }
 
 const AddEntry = (props: AddEntryProps) => {
@@ -93,6 +93,7 @@ const AddEntry = (props: AddEntryProps) => {
 					<Hospital
 						setEntries={props.setEntries}
 						setAddEntryModal={props.setAddEntryModal}
+						diagnoses={props.diagnoses}
 					/>
 				</>
 			);
@@ -133,6 +134,7 @@ const AddEntry = (props: AddEntryProps) => {
 					<OccupationalHC
 						setEntries={props.setEntries}
 						setAddEntryModal={props.setAddEntryModal}
+						diagnoses={props.diagnoses}
 					/>
 				</>
 			);

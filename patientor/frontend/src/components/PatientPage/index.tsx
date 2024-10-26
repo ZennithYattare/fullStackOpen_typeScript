@@ -81,7 +81,11 @@ const PatientPage = () => {
 				</Button>
 			)}
 			{addEntryModal && (
-				<AddEntry setEntries={setEntries} setAddEntryModal={setAddEntryModal} />
+				<AddEntry
+					setEntries={setEntries}
+					setAddEntryModal={setAddEntryModal}
+					diagnoses={diagnoses}
+				/>
 			)}
 			<h3>entries</h3>
 			<ul>

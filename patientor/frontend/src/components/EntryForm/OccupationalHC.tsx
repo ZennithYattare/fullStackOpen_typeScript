@@ -1,16 +1,40 @@
 import { useState } from "react";
-import { TextField, Grid, Button } from "@mui/material";
+import {
+	TextField,
+	Grid,
+	Button,
+	Checkbox,
+	FormControl,
+	InputLabel,
+	ListItemText,
+	MenuItem,
+	OutlinedInput,
+	Select,
+	SelectChangeEvent,
+} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
-import { PatientEntry, EntryWithoutId } from "../../types";
+import { PatientEntry, EntryWithoutId, DiagnosisEntry } from "../../types";
 import patientService from "../../services/patients";
 import { useNotifier } from "../../contexts/NotificationContext";
 
 interface AddEntryProps {
 	setEntries: React.Dispatch<React.SetStateAction<PatientEntry["entries"]>>;
 	setAddEntryModal: React.Dispatch<React.SetStateAction<boolean>>;
+	diagnoses: DiagnosisEntry[];
 }
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+	PaperProps: {
+		style: {
+			maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+			width: 250,
+		},
+	},
+};
 
 const OccupationalHC = (props: AddEntryProps) => {
 	const { id } = useParams<{ id: string }>();
@@ -23,6 +47,16 @@ const OccupationalHC = (props: AddEntryProps) => {
 	const [employerName, setEmployerName] = useState<string>("");
 	const [startDate, setStartDate] = useState<string>("");
 	const [endDate, setEndDate] = useState<string>("");
+
+	const handleChange = (event: SelectChangeEvent<typeof diagnosisCodes>) => {
+		const {
+			target: { value },
+		} = event;
+		setDiagnosisCodes(
+			// On autofill we get a stringified value.
+			typeof value === "string" ? value.split(",") : value
+		);
+	};
 
 	const handleCancel = () => {
 		props.setAddEntryModal(false);
@@ -122,14 +156,35 @@ const OccupationalHC = (props: AddEntryProps) => {
 					/>
 				</div>
 				<div style={{ marginBottom: "1rem" }}>
-					<TextField
-						type="text"
-						label="Diagnosis Codes"
-						variant="filled"
-						fullWidth
-						required
-						onChange={(e) => setDiagnosisCodes(e.target.value.split(", "))}
-					/>
+					<FormControl fullWidth required>
+						<InputLabel id="multiple-checkbox-label">
+							Diagnosis Codes
+						</InputLabel>
+						<Select
+							labelId="multiple-checkbox-label"
+							id="multiple-checkbox"
+							multiple
+							value={diagnosisCodes}
+							onChange={handleChange}
+							input={<OutlinedInput label="Diagnosis Codes" />}
+							renderValue={(selected) => selected.join(", ")}
+							MenuProps={MenuProps}
+							fullWidth
+							required
+						>
+							{props.diagnoses.map((diagnosis) => (
+								<MenuItem key={diagnosis.code} value={diagnosis.code}>
+									<Checkbox
+										checked={diagnosisCodes.indexOf(diagnosis.code) > -1}
+									/>
+									<ListItemText
+										primary={diagnosis.name}
+										secondary={diagnosis.code}
+									/>
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
 				</div>
 				<div style={{ marginBottom: "1rem" }}>
 					<TextField
@@ -140,6 +195,9 @@ const OccupationalHC = (props: AddEntryProps) => {
 						required
 						InputLabelProps={{
 							shrink: true,
+						}}
+						inputProps={{
+							min: date, // Set the minimum value for the discharge date
 						}}
 						onChange={(e) => setStartDate(e.target.value)}
 					/>
@@ -153,6 +211,9 @@ const OccupationalHC = (props: AddEntryProps) => {
 						required
 						InputLabelProps={{
 							shrink: true,
+						}}
+						inputProps={{
+							min: startDate, // Set the minimum value for the discharge date
 						}}
 						onChange={(e) => setEndDate(e.target.value)}
 					/>

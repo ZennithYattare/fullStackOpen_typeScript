@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { TextField, Grid, Button } from "@mui/material";
+import {
+	TextField,
+	Grid,
+	Button,
+	RadioGroup,
+	FormControlLabel,
+	Radio,
+	FormLabel,
+} from "@mui/material";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
@@ -68,7 +76,7 @@ const HealthCheck = (props: AddEntryProps) => {
 			}
 		}
 	};
-	
+
 	return (
 		<div>
 			<form onSubmit={(e) => handleSubmit(e)}>
@@ -105,20 +113,54 @@ const HealthCheck = (props: AddEntryProps) => {
 					/>
 				</div>
 				<div style={{ marginBottom: "1rem" }}>
-					<TextField
-						type="number"
-						label="Healthcheck rating"
-						variant="filled"
-						fullWidth
-						required
-						inputProps={{ min: 0, max: 3 }}
-						onChange={(e) => {
-							const value = Number(e.target.value);
-							if (value >= 0 && value <= 3) {
-								setHealthCheckRating(value);
+					<FormLabel id="radio-buttons-group-label">Health Check Rating</FormLabel>
+					<RadioGroup
+						row
+						aria-labelledby="row-radio-buttons-group-label"
+						name="row-radio-buttons-group"
+						defaultValue="0"
+					>
+						<FormControlLabel
+							value="0"
+							control={<Radio />}
+							label="Healthy"
+							onChange={(e) =>
+								setHealthCheckRating(
+									Number((e.target as HTMLInputElement).value)
+								)
 							}
-						}}
-					/>
+						/>
+						<FormControlLabel
+							value="1"
+							control={<Radio />}
+							label="Low Risk"
+							onChange={(e) =>
+								setHealthCheckRating(
+									Number((e.target as HTMLInputElement).value)
+								)
+							}
+						/>
+						<FormControlLabel
+							value="2"
+							control={<Radio />}
+							label="High Risk"
+							onChange={(e) =>
+								setHealthCheckRating(
+									Number((e.target as HTMLInputElement).value)
+								)
+							}
+						/>
+						<FormControlLabel
+							value="3"
+							control={<Radio />}
+							label="Critical Risk"
+							onChange={(e) =>
+								setHealthCheckRating(
+									Number((e.target as HTMLInputElement).value)
+								)
+							}
+						/>
+					</RadioGroup>
 				</div>
 				<Grid container spacing={2}>
 					<Grid item xs>
