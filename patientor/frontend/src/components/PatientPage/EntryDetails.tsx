@@ -75,6 +75,13 @@ const EntryDetails = (props: EntryDetailsProps) => {
 					/>
 					<span>[Employer name: {props.entry.employerName}]</span>
 					<p>{props.entry.description}</p>
+					<ul>
+						{props.entry.diagnosisCodes?.map((code) => (
+							<li key={code}>
+								{code} - {props.diagnosisMap[code]?.name || "Unknown diagnosis"}
+							</li>
+						))}
+					</ul>
 					{props.entry.sickLeave && (
 						<p>
 							Sick leave: {props.entry.sickLeave.startDate} to{" "}
